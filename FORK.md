@@ -18,15 +18,35 @@ This fork was created to:
 
 ## Fork-Specific Changes
 
-### Web UI Feature
+### Web UI (Full-Featured)
 - **Added**: FastAPI-based web server with WebSocket chat interface
 - **Files**: `nanobot/web/` module with static HTML/CSS/JS interface
-- **Command**: `nanobot web` to start the web server
-- **Features**: Real-time chat, Markdown rendering, responsive design
+- **Command**: `pocketbot web` to start the web server
+- **Chat**: Real-time WebSocket chat with Markdown rendering and syntax highlighting
+- **Settings panel**: Edit model, max tokens, temperature, memory window — saved to disk
+- **Status panel**: Server status, uptime, connections, provider, auth state, ping latency
+- **Auth enforcement**: Token-based auth required for non-local access (REST + WebSocket)
+- **Toast notifications**: Visual feedback for save/error/info actions
+- **Mobile-ready**: PWA meta tags, responsive layout, auto-resize input
+
+### Identity Centralization (`nanobot/identity.py`)
+- Single source of truth for fork branding and all data/config paths
+- Backward-compatible: auto-detects `~/.pocketbot` or falls back to `~/.nanobot`
+- Override via `POCKETBOT_HOME` environment variable
+- All hardcoded `~/.nanobot` paths replaced across the codebase
+
+### API Endpoints
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/status` | Server status, uptime, model, provider, auth |
+| GET | `/api/config` | Safe (non-secret) configuration |
+| PUT | `/api/config` | Update editable settings (model, tokens, temp, memory) |
+| POST | `/api/ping` | Health-check with timestamp |
+| WS | `/ws/chat` | Real-time chat via WebSocket |
 
 ### Configuration Updates
 - Added `web` configuration section for server settings
-- Optional authentication support via bearer tokens
+- Token auth for non-local access (`web.auth.enabled`, `web.auth.token`)
 - Configurable host and port settings
 
 ### Dependencies
@@ -94,7 +114,7 @@ cd nanobot
 pip install -e .
 ```
 
-3. Configure your API keys in `~/.nanobot/config.json`
+3. Configure your API keys in `~/.pocketbot/config.json`
 
 ### Submitting Changes
 

@@ -11,8 +11,9 @@ def ensure_dir(path: Path) -> Path:
 
 
 def get_data_path() -> Path:
-    """Get the nanobot data directory (~/.nanobot)."""
-    return ensure_dir(Path.home() / ".nanobot")
+    """Get the pocketbot data directory."""
+    from nanobot.identity import DATA_DIR
+    return ensure_dir(DATA_DIR)
 
 
 def get_workspace_path(workspace: str | None = None) -> Path:
@@ -20,7 +21,7 @@ def get_workspace_path(workspace: str | None = None) -> Path:
     Get the workspace path.
     
     Args:
-        workspace: Optional workspace path. Defaults to ~/.nanobot/workspace.
+        workspace: Optional workspace path. Defaults to identity.WORKSPACE_DEFAULT.
     
     Returns:
         Expanded and ensured workspace path.
@@ -28,7 +29,8 @@ def get_workspace_path(workspace: str | None = None) -> Path:
     if workspace:
         path = Path(workspace).expanduser()
     else:
-        path = Path.home() / ".nanobot" / "workspace"
+        from nanobot.identity import WORKSPACE_DEFAULT
+        path = WORKSPACE_DEFAULT
     return ensure_dir(path)
 
 

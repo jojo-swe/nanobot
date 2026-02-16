@@ -2,22 +2,17 @@
 <html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>pocketbot</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#020617" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Markdown rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Syntax highlighting -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/highlight.min.js"></script>
     <script>
       tailwind.config = {
@@ -28,18 +23,10 @@
               mono: ["JetBrains Mono", "monospace"],
             },
             colors: {
-              nano: {
-                50: "#f0f9ff",
-                100: "#e0f2fe",
-                200: "#bae6fd",
-                300: "#7dd3fc",
-                400: "#38bdf8",
-                500: "#0ea5e9",
-                600: "#0284c7",
-                700: "#0369a1",
-                800: "#075985",
-                900: "#0c4a6e",
-                950: "#082f49",
+              pocket: {
+                50: "#f0f9ff", 100: "#e0f2fe", 200: "#bae6fd", 300: "#7dd3fc",
+                400: "#38bdf8", 500: "#0ea5e9", 600: "#0284c7", 700: "#0369a1",
+                800: "#075985", 900: "#0c4a6e", 950: "#082f49",
               },
             },
           },
@@ -47,294 +34,215 @@
       };
     </script>
     <style>
-      /* Scrollbar styling */
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 3px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
-      }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-      /* Message content styling */
-      .msg-content p {
-        margin-bottom: 0.5rem;
-      }
-      .msg-content p:last-child {
-        margin-bottom: 0;
-      }
-      .msg-content pre {
-        background: #1e293b;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        overflow-x: auto;
-        margin: 0.5rem 0;
-        border: 1px solid #334155;
-      }
-      .msg-content code {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.85em;
-      }
-      .msg-content :not(pre) > code {
-        background: #1e293b;
-        padding: 0.15rem 0.35rem;
-        border-radius: 0.25rem;
-        color: #e2e8f0;
-      }
-      .msg-content ul,
-      .msg-content ol {
-        margin: 0.5rem 0;
-        padding-left: 1.5rem;
-      }
-      .msg-content ul {
-        list-style-type: disc;
-      }
-      .msg-content ol {
-        list-style-type: decimal;
-      }
-      .msg-content li {
-        margin-bottom: 0.25rem;
-      }
-      .msg-content a {
-        color: #38bdf8;
-        text-decoration: underline;
-      }
-      .msg-content blockquote {
-        border-left: 3px solid #475569;
-        padding-left: 1rem;
-        color: #94a3b8;
-        margin: 0.5rem 0;
-      }
-      .msg-content h1,
-      .msg-content h2,
-      .msg-content h3 {
-        font-weight: 600;
-        margin: 0.75rem 0 0.25rem;
-      }
-      .msg-content h1 {
-        font-size: 1.25rem;
-      }
-      .msg-content h2 {
-        font-size: 1.125rem;
-      }
-      .msg-content h3 {
-        font-size: 1rem;
-      }
-      .msg-content table {
-        border-collapse: collapse;
-        margin: 0.5rem 0;
-        width: 100%;
-      }
-      .msg-content th,
-      .msg-content td {
-        border: 1px solid #334155;
-        padding: 0.4rem 0.75rem;
-        text-align: left;
-      }
-      .msg-content th {
-        background: #1e293b;
-        font-weight: 600;
-      }
+      .msg-content p { margin-bottom: 0.5rem; }
+      .msg-content p:last-child { margin-bottom: 0; }
+      .msg-content pre { background: #1e293b; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 0.5rem 0; border: 1px solid #334155; position: relative; }
+      .msg-content code { font-family: "JetBrains Mono", monospace; font-size: 0.85em; }
+      .msg-content :not(pre) > code { background: #1e293b; padding: 0.15rem 0.35rem; border-radius: 0.25rem; color: #e2e8f0; }
+      .msg-content ul, .msg-content ol { margin: 0.5rem 0; padding-left: 1.5rem; }
+      .msg-content ul { list-style-type: disc; }
+      .msg-content ol { list-style-type: decimal; }
+      .msg-content li { margin-bottom: 0.25rem; }
+      .msg-content a { color: #38bdf8; text-decoration: underline; }
+      .msg-content blockquote { border-left: 3px solid #475569; padding-left: 1rem; color: #94a3b8; margin: 0.5rem 0; }
+      .msg-content h1, .msg-content h2, .msg-content h3 { font-weight: 600; margin: 0.75rem 0 0.25rem; }
+      .msg-content h1 { font-size: 1.25rem; }
+      .msg-content h2 { font-size: 1.125rem; }
+      .msg-content h3 { font-size: 1rem; }
+      .msg-content table { border-collapse: collapse; margin: 0.5rem 0; width: 100%; }
+      .msg-content th, .msg-content td { border: 1px solid #334155; padding: 0.4rem 0.75rem; text-align: left; }
+      .msg-content th { background: #1e293b; font-weight: 600; }
 
-      /* Typing dots animation */
-      .typing-dot {
-        animation: typingDot 1.4s infinite both;
-      }
-      .typing-dot:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .typing-dot:nth-child(3) {
-        animation-delay: 0.4s;
-      }
+      .typing-dot { animation: typingDot 1.4s infinite both; }
+      .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+      .typing-dot:nth-child(3) { animation-delay: 0.4s; }
       @keyframes typingDot {
-        0%,
-        60%,
-        100% {
-          opacity: 0.3;
-          transform: translateY(0);
-        }
-        30% {
-          opacity: 1;
-          transform: translateY(-4px);
-        }
+        0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+        30% { opacity: 1; transform: translateY(-4px); }
       }
 
-      /* Fade in animation */
-      .fade-in {
-        animation: fadeIn 0.25s ease-out;
-      }
+      .fade-in { animation: fadeIn 0.25s ease-out; }
       @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Textarea auto-resize */
-      #chatInput {
-        max-height: 200px;
+      .slide-down { animation: slideDown 0.2s ease-out; }
+      @keyframes slideDown {
+        from { opacity: 0; max-height: 0; }
+        to { opacity: 1; max-height: 600px; }
       }
+
+      #chatInput { max-height: 200px; }
+
+      /* Panel tab styling */
+      .panel-tab { transition: all 0.15s; }
+      .panel-tab.active { color: #e2e8f0; border-bottom-color: #0ea5e9; }
+
+      /* Toast notification */
+      .toast {
+        animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+      }
+      @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+      /* Settings input styling */
+      .setting-input {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 0.5rem;
+        padding: 0.375rem 0.625rem;
+        font-size: 0.8125rem;
+        color: #e2e8f0;
+        width: 100%;
+        transition: border-color 0.15s;
+      }
+      .setting-input:focus { outline: none; border-color: #0ea5e9; }
+      .setting-input.changed { border-color: #f59e0b; }
     </style>
   </head>
   <body class="h-full bg-slate-950 text-slate-200 font-sans">
     <div id="app" class="h-full flex flex-col">
       <!-- Header -->
-      <header
-        class="flex-shrink-0 border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm"
-      >
-        <div
-          class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between"
-        >
+      <header class="flex-shrink-0 border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <span class="text-xl">🤖</span>
             <h1 class="text-lg font-semibold text-white">pocketbot</h1>
-            <span
-              id="statusBadge"
-              class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400"
-            >
-              connecting...
-            </span>
+            <span id="statusBadge" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">connecting...</span>
           </div>
-          <div class="flex items-center gap-3">
-            <button
-              onclick="newSession()"
-              title="New session"
-              class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+          <div class="flex items-center gap-1">
+            <button onclick="showPanel('status')" title="Status" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             </button>
-            <button
-              onclick="toggleSettings()"
-              title="Settings"
-              class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+            <button onclick="showPanel('settings')" title="Settings" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
+            <button onclick="newSession()" title="New chat" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             </button>
           </div>
         </div>
       </header>
 
-      <!-- Settings panel (hidden by default) -->
-      <div
-        id="settingsPanel"
-        class="hidden border-b border-slate-800 bg-slate-900/50"
-      >
-        <div class="max-w-4xl mx-auto px-4 py-4">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <span class="text-slate-500 text-xs uppercase tracking-wider"
-                >Model</span
-              >
-              <p id="cfgModel" class="text-slate-300 mt-0.5 font-mono text-xs">
-                —
-              </p>
+      <!-- Panels (status / settings) -->
+      <div id="panelContainer" class="hidden border-b border-slate-800 bg-slate-900/60 backdrop-blur-sm slide-down">
+        <div class="max-w-4xl mx-auto px-4">
+
+          <!-- Status Panel -->
+          <div id="statusPanel" class="hidden py-4">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-300">Status & Diagnostics</h3>
+              <div class="flex gap-2">
+                <button onclick="refreshStatus()" class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">Refresh</button>
+                <button onclick="pingServer()" class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">Ping</button>
+                <button onclick="hidePanel()" class="text-xs px-2.5 py-1 rounded-md text-slate-500 hover:text-white transition-colors">&times;</button>
+              </div>
             </div>
-            <div>
-              <span class="text-slate-500 text-xs uppercase tracking-wider"
-                >Max Tokens</span
-              >
-              <p id="cfgTokens" class="text-slate-300 mt-0.5 font-mono text-xs">
-                —
-              </p>
-            </div>
-            <div>
-              <span class="text-slate-500 text-xs uppercase tracking-wider"
-                >Temperature</span
-              >
-              <p id="cfgTemp" class="text-slate-300 mt-0.5 font-mono text-xs">
-                —
-              </p>
-            </div>
-            <div>
-              <span class="text-slate-500 text-xs uppercase tracking-wider"
-                >Workspace</span
-              >
-              <p
-                id="cfgWorkspace"
-                class="text-slate-300 mt-0.5 font-mono text-xs truncate"
-              >
-                —
-              </p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-sm">
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Server</span>
+                <p id="stServer" class="text-emerald-400 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Version</span>
+                <p id="stVersion" class="text-slate-300 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Uptime</span>
+                <p id="stUptime" class="text-slate-300 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Connections</span>
+                <p id="stConns" class="text-slate-300 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Model</span>
+                <p id="stModel" class="text-pocket-400 mt-0.5 font-mono text-xs truncate">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Provider</span>
+                <p id="stProvider" class="text-slate-300 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Auth</span>
+                <p id="stAuth" class="mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Ping</span>
+                <p id="stPing" class="text-slate-300 mt-0.5 font-mono text-xs">—</p>
+              </div>
             </div>
           </div>
+
+          <!-- Settings Panel -->
+          <div id="settingsPanel" class="hidden py-4">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-slate-300">Settings</h3>
+              <div class="flex gap-2">
+                <button onclick="saveSettings()" id="saveBtn" class="hidden text-xs px-3 py-1 rounded-md bg-pocket-600 text-white hover:bg-pocket-500 transition-colors font-medium">Save Changes</button>
+                <button onclick="resetSettings()" id="resetBtn" class="hidden text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">Reset</button>
+                <button onclick="hidePanel()" class="text-xs px-2.5 py-1 rounded-md text-slate-500 hover:text-white transition-colors">&times;</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+              <div>
+                <label class="text-slate-500 text-xs uppercase tracking-wider block mb-1">Model</label>
+                <input id="cfgModel" type="text" class="setting-input font-mono" data-field="model" />
+              </div>
+              <div>
+                <label class="text-slate-500 text-xs uppercase tracking-wider block mb-1">Max Tokens</label>
+                <input id="cfgTokens" type="number" min="1" step="1" class="setting-input font-mono" data-field="max_tokens" />
+              </div>
+              <div>
+                <label class="text-slate-500 text-xs uppercase tracking-wider block mb-1">Temperature</label>
+                <input id="cfgTemp" type="number" min="0" max="2" step="0.05" class="setting-input font-mono" data-field="temperature" />
+              </div>
+              <div>
+                <label class="text-slate-500 text-xs uppercase tracking-wider block mb-1">Memory Window</label>
+                <input id="cfgMemory" type="number" min="1" step="1" class="setting-input font-mono" data-field="memory_window" />
+              </div>
+            </div>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+              <div class="bg-slate-800/30 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Workspace</span>
+                <p id="cfgWorkspace" class="text-slate-400 mt-0.5 font-mono text-xs truncate">—</p>
+              </div>
+              <div class="bg-slate-800/30 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Max Iterations</span>
+                <p id="cfgIter" class="text-slate-400 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/30 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Web Host</span>
+                <p id="cfgHost" class="text-slate-400 mt-0.5 font-mono text-xs">—</p>
+              </div>
+              <div class="bg-slate-800/30 rounded-lg p-2.5">
+                <span class="text-slate-500 text-xs uppercase tracking-wider block">Auth</span>
+                <p id="cfgAuth" class="mt-0.5 font-mono text-xs">—</p>
+              </div>
+            </div>
+            <p id="settingsMsg" class="hidden mt-2 text-xs"></p>
+          </div>
+
         </div>
       </div>
 
       <!-- Messages area -->
       <main id="messages" class="flex-1 overflow-y-auto">
         <div class="max-w-4xl mx-auto px-4 py-6 space-y-1">
-          <!-- Welcome message -->
-          <div
-            id="welcome"
-            class="flex flex-col items-center justify-center py-20 text-center"
-          >
+          <div id="welcome" class="flex flex-col items-center justify-center py-20 text-center">
             <span class="text-5xl mb-4">🤖</span>
-            <h2 class="text-2xl font-semibold text-white mb-2">
-              Welcome to pocketbot
-            </h2>
-            <p class="text-slate-400 max-w-md">
-              Your lightweight personal AI assistant. Type a message below to
-              get started.
-            </p>
+            <h2 class="text-2xl font-semibold text-white mb-2">Welcome to pocketbot</h2>
+            <p class="text-slate-400 max-w-md">Your pocket-sized personal AI assistant. Type a message below to get started.</p>
             <div class="mt-6 flex flex-wrap gap-2 justify-center">
-              <button
-                onclick="sendQuickMessage('What can you do?')"
-                class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-              >
-                What can you do?
-              </button>
-              <button
-                onclick="sendQuickMessage('Tell me about yourself')"
-                class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-              >
-                Tell me about yourself
-              </button>
-              <button
-                onclick="sendQuickMessage('Help me write some code')"
-                class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-              >
-                Help me write code
-              </button>
+              <button onclick="sendQuickMessage('What can you do?')" class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">What can you do?</button>
+              <button onclick="sendQuickMessage('Tell me about yourself')" class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Tell me about yourself</button>
+              <button onclick="sendQuickMessage('Help me write some code')" class="px-3 py-1.5 text-sm rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Help me write code</button>
             </div>
           </div>
         </div>
@@ -345,66 +253,32 @@
         <div class="flex items-center gap-2 text-slate-500 text-sm">
           <span class="text-base">🤖</span>
           <div class="flex gap-1">
-            <span
-              class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"
-            ></span>
-            <span
-              class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"
-            ></span>
-            <span
-              class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"
-            ></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+            <span class="typing-dot w-1.5 h-1.5 rounded-full bg-slate-500"></span>
           </div>
           <span class="text-xs">thinking...</span>
         </div>
       </div>
 
       <!-- Input area -->
-      <footer
-        class="flex-shrink-0 border-t border-slate-800 bg-slate-950/80 backdrop-blur-sm"
-      >
+      <footer class="flex-shrink-0 border-t border-slate-800 bg-slate-950/80 backdrop-blur-sm">
         <div class="max-w-4xl mx-auto px-4 py-3">
-          <form
-            id="chatForm"
-            onsubmit="handleSubmit(event)"
-            class="flex items-end gap-2"
-          >
+          <form id="chatForm" onsubmit="handleSubmit(event)" class="flex items-end gap-2">
             <div class="flex-1 relative">
-              <textarea
-                id="chatInput"
-                rows="1"
-                placeholder="Type your message... (Shift+Enter for new line)"
-                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-nano-500 focus:ring-1 focus:ring-nano-500 resize-none transition-colors"
-              ></textarea>
+              <textarea id="chatInput" rows="1" placeholder="Type your message... (Shift+Enter for new line)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-pocket-500 focus:ring-1 focus:ring-pocket-500 resize-none transition-colors"></textarea>
             </div>
-            <button
-              type="submit"
-              id="sendBtn"
-              title="Send message"
-              aria-label="Send message"
-              class="flex-shrink-0 p-3 rounded-xl bg-nano-600 text-white hover:bg-nano-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 12h14M12 5l7 7-7 7"
-                />
-              </svg>
+            <button type="submit" id="sendBtn" title="Send message" aria-label="Send message" class="flex-shrink-0 p-3 rounded-xl bg-pocket-600 text-white hover:bg-pocket-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </form>
-          <p class="text-center text-xs text-slate-600 mt-2">
-            pocketbot web UI &middot; Connected via WebSocket
-          </p>
+          <p class="text-center text-xs text-slate-600 mt-2">pocketbot &middot; WebSocket</p>
         </div>
       </footer>
     </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center"></div>
 
     <script>
       // =========================================================================
@@ -412,11 +286,14 @@
       // =========================================================================
       let ws = null;
       let sessionId = null;
-      let isTyping = false;
       let messageCount = 0;
       let reconnectAttempts = 0;
       const MAX_RECONNECT = 10;
       const RECONNECT_BASE_MS = 1000;
+
+      // Settings state: original values from server
+      let originalConfig = {};
+      let activePanel = null; // 'status' | 'settings' | null
 
       // =========================================================================
       // DOM refs
@@ -428,19 +305,193 @@
       const inputEl = document.getElementById("chatInput");
       const sendBtn = document.getElementById("sendBtn");
       const statusBadge = document.getElementById("statusBadge");
+      const panelContainer = document.getElementById("panelContainer");
 
       // =========================================================================
       // Markdown setup
       // =========================================================================
       marked.setOptions({
         highlight: function (code, lang) {
-          if (lang && hljs.getLanguage(lang)) {
-            return hljs.highlight(code, { language: lang }).value;
-          }
+          if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
           return hljs.highlightAuto(code).value;
         },
         breaks: true,
         gfm: true,
+      });
+
+      // =========================================================================
+      // Toast notifications
+      // =========================================================================
+      function showToast(message, type = "info") {
+        const colors = {
+          success: "bg-emerald-900/90 text-emerald-300 border-emerald-700",
+          error: "bg-red-900/90 text-red-300 border-red-700",
+          info: "bg-slate-800/90 text-slate-300 border-slate-600",
+          warning: "bg-amber-900/90 text-amber-300 border-amber-700",
+        };
+        const el = document.createElement("div");
+        el.className = `toast text-xs px-4 py-2 rounded-lg border backdrop-blur-sm ${colors[type] || colors.info}`;
+        el.textContent = message;
+        document.getElementById("toastContainer").appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }
+
+      // =========================================================================
+      // Panel management
+      // =========================================================================
+      function showPanel(name) {
+        if (activePanel === name) { hidePanel(); return; }
+        activePanel = name;
+        panelContainer.classList.remove("hidden");
+        document.getElementById("statusPanel").classList.toggle("hidden", name !== "status");
+        document.getElementById("settingsPanel").classList.toggle("hidden", name !== "settings");
+        if (name === "status") refreshStatus();
+        if (name === "settings") loadConfig();
+      }
+
+      function hidePanel() {
+        activePanel = null;
+        panelContainer.classList.add("hidden");
+      }
+
+      // =========================================================================
+      // Status panel
+      // =========================================================================
+      async function refreshStatus() {
+        try {
+          const res = await fetch("/api/status");
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const d = await res.json();
+          document.getElementById("stServer").textContent = d.status || "unknown";
+          document.getElementById("stServer").className = `mt-0.5 font-mono text-xs ${d.status === "running" ? "text-emerald-400" : "text-red-400"}`;
+          document.getElementById("stVersion").textContent = d.version || "—";
+          document.getElementById("stUptime").textContent = formatUptime(d.uptime_seconds);
+          document.getElementById("stConns").textContent = d.connections ?? "—";
+          document.getElementById("stModel").textContent = d.model || "—";
+          document.getElementById("stProvider").textContent = d.provider || "—";
+          const authEl = document.getElementById("stAuth");
+          authEl.textContent = d.auth_enabled ? "enabled" : "disabled";
+          authEl.className = `mt-0.5 font-mono text-xs ${d.auth_enabled ? "text-emerald-400" : "text-amber-400"}`;
+        } catch (e) {
+          document.getElementById("stServer").textContent = "unreachable";
+          document.getElementById("stServer").className = "mt-0.5 font-mono text-xs text-red-400";
+          showToast("Failed to fetch status", "error");
+        }
+      }
+
+      async function pingServer() {
+        const stPing = document.getElementById("stPing");
+        stPing.textContent = "...";
+        try {
+          const t0 = performance.now();
+          const res = await fetch("/api/ping", { method: "POST" });
+          const ms = Math.round(performance.now() - t0);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          stPing.textContent = `${ms}ms`;
+          stPing.className = `mt-0.5 font-mono text-xs ${ms < 100 ? "text-emerald-400" : ms < 500 ? "text-amber-400" : "text-red-400"}`;
+        } catch {
+          stPing.textContent = "failed";
+          stPing.className = "mt-0.5 font-mono text-xs text-red-400";
+        }
+      }
+
+      function formatUptime(seconds) {
+        if (!seconds && seconds !== 0) return "—";
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        if (h > 0) return `${h}h ${m}m`;
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
+      }
+
+      // =========================================================================
+      // Settings panel
+      // =========================================================================
+      async function loadConfig() {
+        try {
+          const res = await fetch("/api/config");
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const d = await res.json();
+          originalConfig = { model: d.model, max_tokens: d.max_tokens, temperature: d.temperature, memory_window: d.memory_window };
+
+          document.getElementById("cfgModel").value = d.model || "";
+          document.getElementById("cfgTokens").value = d.max_tokens || "";
+          document.getElementById("cfgTemp").value = d.temperature ?? "";
+          document.getElementById("cfgMemory").value = d.memory_window || "";
+          document.getElementById("cfgWorkspace").textContent = d.workspace || "—";
+          document.getElementById("cfgIter").textContent = d.max_tool_iterations ?? "—";
+          document.getElementById("cfgHost").textContent = `${d.web_host || "?"}:${d.web_port || "?"}`;
+          const authEl = document.getElementById("cfgAuth");
+          authEl.textContent = d.auth_enabled ? "enabled" : "disabled";
+          authEl.className = `mt-0.5 font-mono text-xs ${d.auth_enabled ? "text-emerald-400" : "text-amber-400"}`;
+
+          checkSettingsChanged();
+        } catch {
+          showToast("Failed to load config", "error");
+        }
+      }
+
+      function checkSettingsChanged() {
+        const fields = document.querySelectorAll(".setting-input");
+        let changed = false;
+        fields.forEach(f => {
+          const key = f.dataset.field;
+          const orig = String(originalConfig[key] ?? "");
+          const isChanged = f.value !== orig;
+          f.classList.toggle("changed", isChanged);
+          if (isChanged) changed = true;
+        });
+        document.getElementById("saveBtn").classList.toggle("hidden", !changed);
+        document.getElementById("resetBtn").classList.toggle("hidden", !changed);
+      }
+
+      async function saveSettings() {
+        const body = {};
+        document.querySelectorAll(".setting-input").forEach(f => {
+          const key = f.dataset.field;
+          const orig = String(originalConfig[key] ?? "");
+          if (f.value !== orig) {
+            body[key] = f.type === "number" ? parseFloat(f.value) : f.value;
+          }
+        });
+
+        if (Object.keys(body).length === 0) return;
+
+        try {
+          const res = await fetch("/api/config", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const result = await res.json();
+
+          if (result.errors && Object.keys(result.errors).length > 0) {
+            const errMsg = Object.entries(result.errors).map(([k, v]) => `${k}: ${v}`).join(", ");
+            showToast(`Errors: ${errMsg}`, "error");
+          }
+          if (result.updated && Object.keys(result.updated).length > 0) {
+            showToast(`Saved: ${Object.keys(result.updated).join(", ")}`, "success");
+            // Reload to get fresh values
+            await loadConfig();
+          }
+        } catch (e) {
+          showToast(`Save failed: ${e.message}`, "error");
+        }
+      }
+
+      function resetSettings() {
+        document.getElementById("cfgModel").value = originalConfig.model || "";
+        document.getElementById("cfgTokens").value = originalConfig.max_tokens || "";
+        document.getElementById("cfgTemp").value = originalConfig.temperature ?? "";
+        document.getElementById("cfgMemory").value = originalConfig.memory_window || "";
+        checkSettingsChanged();
+      }
+
+      // Attach change listeners to setting inputs
+      document.querySelectorAll(".setting-input").forEach(f => {
+        f.addEventListener("input", checkSettingsChanged);
       });
 
       // =========================================================================
@@ -449,24 +500,25 @@
       function connect() {
         const proto = location.protocol === "https:" ? "wss:" : "ws:";
         const url = `${proto}//${location.host}/ws/chat`;
-
         ws = new WebSocket(url);
 
         ws.onopen = () => {
           reconnectAttempts = 0;
           setStatus("connected", "bg-emerald-900/50 text-emerald-400");
         };
-
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
           handleServerMessage(data);
         };
-
-        ws.onclose = () => {
+        ws.onclose = (e) => {
+          if (e.code === 4001) {
+            setStatus("unauthorized", "bg-red-900/50 text-red-400");
+            showToast("Authentication required. Enable auth token in config.", "error");
+            return;
+          }
           setStatus("disconnected", "bg-red-900/50 text-red-400");
           scheduleReconnect();
         };
-
         ws.onerror = () => {
           setStatus("error", "bg-red-900/50 text-red-400");
         };
@@ -478,12 +530,8 @@
           return;
         }
         reconnectAttempts++;
-        const delay =
-          RECONNECT_BASE_MS * Math.pow(2, Math.min(reconnectAttempts - 1, 5));
-        setStatus(
-          `reconnecting (${reconnectAttempts})...`,
-          "bg-yellow-900/50 text-yellow-400",
-        );
+        const delay = RECONNECT_BASE_MS * Math.pow(2, Math.min(reconnectAttempts - 1, 5));
+        setStatus(`reconnecting (${reconnectAttempts})...`, "bg-yellow-900/50 text-yellow-400");
         setTimeout(connect, delay);
       }
 
@@ -500,22 +548,17 @@
           case "connected":
             sessionId = data.session_id;
             break;
-
           case "message":
             hideTyping();
             addMessage(data.role || "assistant", data.content);
             break;
-
           case "typing":
-            if (data.status) showTyping();
-            else hideTyping();
+            if (data.status) showTyping(); else hideTyping();
             break;
-
           case "error":
             hideTyping();
             addMessage("error", data.content);
             break;
-
           case "pong":
             break;
         }
@@ -532,14 +575,9 @@
       }
 
       function sendMessage(content) {
-        // Hide welcome on first message
-        if (messageCount === 0 && welcomeEl) {
-          welcomeEl.style.display = "none";
-        }
-
+        if (messageCount === 0 && welcomeEl) welcomeEl.style.display = "none";
         addMessage("user", content);
         ws.send(JSON.stringify({ type: "message", content }));
-
         inputEl.value = "";
         inputEl.style.height = "auto";
         inputEl.focus();
@@ -552,7 +590,12 @@
 
       function newSession() {
         if (!ws || ws.readyState !== WebSocket.OPEN) return;
-        sendMessage("/new");
+        // Clear messages visually
+        messagesContainer.innerHTML = "";
+        messageCount = 0;
+        if (welcomeEl) welcomeEl.style.display = "";
+        messagesContainer.appendChild(welcomeEl);
+        showToast("New chat session", "info");
       }
 
       // =========================================================================
@@ -567,7 +610,7 @@
           wrapper.innerHTML = `
           <div class="flex justify-end mb-4">
             <div class="max-w-[85%] md:max-w-[70%]">
-              <div class="bg-nano-600/20 border border-nano-500/20 rounded-2xl rounded-tr-md px-4 py-2.5">
+              <div class="bg-pocket-600/20 border border-pocket-500/20 rounded-2xl rounded-tr-md px-4 py-2.5">
                 <div class="msg-content text-sm text-slate-200">${escapeHtml(content)}</div>
               </div>
               <div class="text-right mt-1 text-xs text-slate-600">${formatTime()}</div>
@@ -585,9 +628,7 @@
         } else {
           wrapper.innerHTML = `
           <div class="flex mb-4 gap-3">
-            <div class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-sm mt-0.5">
-              🐈
-            </div>
+            <div class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-sm mt-0.5">🤖</div>
             <div class="max-w-[85%] md:max-w-[75%] min-w-0">
               <div class="bg-slate-900/60 border border-slate-800 rounded-2xl rounded-tl-md px-4 py-2.5">
                 <div class="msg-content text-sm text-slate-300">${renderMarkdown(content)}</div>
@@ -595,11 +636,7 @@
               <div class="mt-1 text-xs text-slate-600">${formatTime()}</div>
             </div>
           </div>`;
-
-          // Highlight code blocks
-          wrapper.querySelectorAll("pre code").forEach((block) => {
-            hljs.highlightElement(block);
-          });
+          wrapper.querySelectorAll("pre code").forEach((block) => hljs.highlightElement(block));
         }
 
         messagesContainer.appendChild(wrapper);
@@ -608,11 +645,7 @@
 
       function renderMarkdown(text) {
         if (!text) return "";
-        try {
-          return marked.parse(text);
-        } catch {
-          return escapeHtml(text);
-        }
+        try { return marked.parse(text); } catch { return escapeHtml(text); }
       }
 
       function escapeHtml(text) {
@@ -622,72 +655,35 @@
       }
 
       function formatTime() {
-        return new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       }
 
       function scrollToBottom() {
-        requestAnimationFrame(() => {
-          messagesEl.scrollTop = messagesEl.scrollHeight;
-        });
+        requestAnimationFrame(() => { messagesEl.scrollTop = messagesEl.scrollHeight; });
       }
 
       // =========================================================================
       // Typing indicator
       // =========================================================================
-      function showTyping() {
-        typingEl.classList.remove("hidden");
-        scrollToBottom();
-      }
-
-      function hideTyping() {
-        typingEl.classList.add("hidden");
-      }
-
-      // =========================================================================
-      // Settings panel
-      // =========================================================================
-      function toggleSettings() {
-        const panel = document.getElementById("settingsPanel");
-        panel.classList.toggle("hidden");
-        if (!panel.classList.contains("hidden")) {
-          loadConfig();
-        }
-      }
-
-      async function loadConfig() {
-        try {
-          const res = await fetch("/api/config");
-          const data = await res.json();
-          document.getElementById("cfgModel").textContent = data.model || "—";
-          document.getElementById("cfgTokens").textContent =
-            data.max_tokens || "—";
-          document.getElementById("cfgTemp").textContent =
-            data.temperature || "—";
-          document.getElementById("cfgWorkspace").textContent =
-            data.workspace || "—";
-        } catch {
-          // Silently fail
-        }
-      }
+      function showTyping() { typingEl.classList.remove("hidden"); scrollToBottom(); }
+      function hideTyping() { typingEl.classList.add("hidden"); }
 
       // =========================================================================
       // Input handling
       // =========================================================================
       inputEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          handleSubmit(e);
-        }
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSubmit(e); }
+      });
+
+      // Auto-resize textarea
+      inputEl.addEventListener("input", () => {
+        inputEl.style.height = "auto";
+        inputEl.style.height = Math.min(inputEl.scrollHeight, 200) + "px";
       });
 
       // Keep-alive ping
       setInterval(() => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: "ping" }));
-        }
+        if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "ping" }));
       }, 30000);
 
       // =========================================================================

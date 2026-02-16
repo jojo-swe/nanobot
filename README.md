@@ -15,10 +15,6 @@
 
 > **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository with web UI enhancements and rebranding. 
 
-⚡️ Delivers core agent functionality in just **~4,000** lines of code — **99% smaller** than Clawdbot's 430k+ lines.
-
-📏 Real-time line count: **3,880 lines** (run `bash core_agent_lines.sh` to verify anytime)
-
 ## 📢 News
 
 - **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `pocketbot web` to start a modern web-based chat interface.

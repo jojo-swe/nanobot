@@ -298,8 +298,8 @@ class TelegramChannel(BaseChannel):
                 ext = self._get_extension(media_type, getattr(media_file, 'mime_type', None))
                 
                 # Save to workspace/media/
-                from pathlib import Path
-                media_dir = Path.home() / ".nanobot" / "media"
+                from nanobot.identity import MEDIA_DIR
+                media_dir = MEDIA_DIR
                 media_dir.mkdir(parents=True, exist_ok=True)
                 
                 file_path = media_dir / f"{media_file.file_id[:16]}{ext}"

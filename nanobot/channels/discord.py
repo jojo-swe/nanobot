@@ -199,7 +199,8 @@ class DiscordChannel(BaseChannel):
 
         content_parts = [content] if content else []
         media_paths: list[str] = []
-        media_dir = Path.home() / ".nanobot" / "media"
+        from nanobot.identity import MEDIA_DIR
+        media_dir = MEDIA_DIR
 
         for attachment in payload.get("attachments") or []:
             url = attachment.get("url")

@@ -9,13 +9,15 @@ from nanobot.config.schema import Config
 
 def get_config_path() -> Path:
     """Get the default configuration file path."""
-    return Path.home() / ".nanobot" / "config.json"
+    from nanobot.identity import CONFIG_PATH
+    return CONFIG_PATH
 
 
 def get_data_dir() -> Path:
-    """Get the nanobot data directory."""
-    from nanobot.utils.helpers import get_data_path
-    return get_data_path()
+    """Get the pocketbot data directory."""
+    from nanobot.identity import DATA_DIR
+    from nanobot.utils.helpers import ensure_dir
+    return ensure_dir(DATA_DIR)
 
 
 def load_config(config_path: Path | None = None) -> Config:

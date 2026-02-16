@@ -87,7 +87,8 @@ def _init_prompt_session() -> None:
     except Exception:
         pass
 
-    history_file = Path.home() / ".nanobot" / "history" / "cli_history"
+    from nanobot.identity import HISTORY_DIR
+    history_file = HISTORY_DIR / "cli_history"
     history_file.parent.mkdir(parents=True, exist_ok=True)
 
     _PROMPT_SESSION = PromptSession(
@@ -188,12 +189,13 @@ def onboard():
     # Create default bootstrap files
     _create_workspace_templates(workspace)
     
-    console.print(f"\n{__logo__} nanobot is ready!")
+    from nanobot.identity import APP_NAME, CONFIG_PATH, FORK_REPO
+    console.print(f"\n{__logo__} {APP_NAME} is ready!")
     console.print("\nNext steps:")
-    console.print("  1. Add your API key to [cyan]~/.nanobot/config.json[/cyan]")
+    console.print(f"  1. Add your API key to [cyan]{CONFIG_PATH}[/cyan]")
     console.print("     Get one at: https://openrouter.ai/keys")
-    console.print("  2. Chat: [cyan]nanobot agent -m \"Hello!\"[/cyan]")
-    console.print("\n[dim]Want Telegram/WhatsApp? See: https://github.com/HKUDS/nanobot#-chat-apps[/dim]")
+    console.print(f"  2. Chat: [cyan]{APP_NAME} agent -m \"Hello!\"[/cyan]")
+    console.print(f"\n[dim]Want Telegram/WhatsApp? See: https://github.com/{FORK_REPO}#-chat-apps[/dim]")
 
 
 
@@ -294,7 +296,8 @@ def _make_provider(config: Config):
 
     if not model.startswith("bedrock/") and not (p and p.api_key):
         console.print("[red]Error: No API key configured.[/red]")
-        console.print("Set one in ~/.nanobot/config.json under providers section")
+        from nanobot.identity import CONFIG_PATH
+        console.print(f"Set one in {CONFIG_PATH} under providers section")
         raise typer.Exit(1)
 
     return LiteLLMProvider(
@@ -667,7 +670,8 @@ def _get_bridge_dir() -> Path:
     import subprocess
     
     # User's bridge location
-    user_bridge = Path.home() / ".nanobot" / "bridge"
+    from nanobot.identity import BRIDGE_DIR
+    user_bridge = BRIDGE_DIR
     
     # Check if already built
     if (user_bridge / "dist" / "index.js").exists():

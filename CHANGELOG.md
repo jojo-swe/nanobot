@@ -1,6 +1,34 @@
 # Changelog
 
-All notable changes to nanobot will be documented in this file.
+All notable changes to pocketbot (fork of nanobot) will be documented in this file.
+
+## [2026-02-17] - Web UI Feature Completion & Identity Centralization
+
+### 🌐 Web UI Enhancements
+- **Settings panel** - Editable model, max tokens, temperature, memory window with save/reset
+- **Status & diagnostics panel** - Server status, uptime, connections, provider, auth state, ping
+- **PUT /api/config endpoint** - Update safe config fields from the UI with validation and disk persistence
+- **POST /api/ping endpoint** - Health-check with round-trip latency measurement
+- **Enhanced /api/status** - Now includes uptime, provider name, auth state, host/port
+- **Toast notifications** - Visual feedback for save success/failure, errors, and info
+- **Auth enforcement** - Token-based auth for non-local REST and WebSocket access
+- **WebSocket auth** - Query param `?token=xxx` for non-local WebSocket connections
+- **Mobile-friendly meta tags** - PWA-capable viewport, theme-color, apple-mobile-web-app
+- **Auto-resize textarea** - Input grows with content up to 200px
+- **New chat button** - Clears messages and resets session visually
+
+### 🏷️ Identity Centralization
+- **New `nanobot/identity.py`** - Single source of truth for fork branding and data paths
+- **Backward-compatible paths** - Auto-detects `~/.pocketbot` or falls back to `~/.nanobot`
+- **Environment override** - `POCKETBOT_HOME` env var for custom data directory
+- **All hardcoded paths updated** - `config/loader.py`, `utils/helpers.py`, `session/manager.py`, `cli/commands.py`, `channels/telegram.py`, `channels/discord.py`, `config/schema.py`
+
+### 🎨 Branding
+- **Color scheme renamed** - `nano-*` → `pocket-*` in Tailwind config
+- **Assistant avatar** - Updated from 🐈 to 🤖 in chat messages
+- **Footer simplified** - "pocketbot · WebSocket"
+
+---
 
 ## [2026-02-16] - Web UI Release
 
