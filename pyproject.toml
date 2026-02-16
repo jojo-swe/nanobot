@@ -1,7 +1,7 @@
 [project]
-name = "nanobot-ai"
+name = "pocketbot-ai"
 version = "0.1.3.post7+jojo"
-description = "A lightweight personal AI assistant framework (fork of HKUDS/nanobot)"
+description = "A pocket-sized personal AI assistant with web interface (fork of HKUDS/nanobot)"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
@@ -10,7 +10,7 @@ authors = [
 maintainers = [
     {name = "jojo-swe", email = "74981366+jojo-swe@users.noreply.github.com"}
 ]
-keywords = ["ai", "agent", "chatbot", "assistant"]
+keywords = ["ai", "agent", "chatbot", "assistant", "pocket", "web"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -61,7 +61,7 @@ dev = [
 ]
 
 [project.scripts]
-nanobot = "nanobot.cli.commands:app"
+pocketbot = "nanobot.cli.commands:app"
 
 [build-system]
 requires = ["hatchling"]

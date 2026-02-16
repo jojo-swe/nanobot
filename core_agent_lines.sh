@@ -2,7 +2,7 @@
 # Count core agent lines (excluding channels/, cli/, providers/ adapters)
 cd "$(dirname "$0")" || exit 1
 
-echo "nanobot core agent line count"
+echo "pocketbot core agent line count"
 echo "================================"
 echo ""
 

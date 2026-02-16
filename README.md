@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="nanobot_logo.png" alt="nanobot" width="500">
-  <h1>nanobot: Ultra-Lightweight Personal AI Assistant</h1>
+  <img src="nanobot_logo.png" alt="pocketbot" width="500">
+  <h1>pocketbot: Pocket-Sized AI Assistant</h1>
   <p>
-    <a href="https://pypi.org/project/nanobot-ai/"><img src="https://img.shields.io/pypi/v/nanobot-ai" alt="PyPI"></a>
-    <a href="https://pepy.tech/project/nanobot-ai"><img src="https://static.pepy.tech/badge/nanobot-ai" alt="Downloads"></a>
+    <a href="https://pypi.org/project/pocketbot-ai/"><img src="https://img.shields.io/pypi/v/pocketbot-ai" alt="PyPI"></a>
+    <a href="https://pepy.tech/project/pocketbot-ai"><img src="https://static.pepy.tech/badge/pocketbot-ai" alt="Downloads"></a>
     <img src="https://img.shields.io/badge/python-≥3.11-blue" alt="Python">
     <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
     <a href="./COMMUNICATION.md"><img src="https://img.shields.io/badge/Feishu-Group-E9DBFC?style=flat&logo=feishu&logoColor=white" alt="Feishu"></a>
@@ -12,9 +12,9 @@
   </p>
 </div>
 
-🐈 **nanobot** is an **ultra-lightweight** personal AI assistant inspired by [OpenClaw](https://github.com/openclaw/openclaw) 
+🤖 **pocketbot** is a **pocket-sized** personal AI assistant with a modern web interface, forked from [nanobot](https://github.com/HKUDS/nanobot) and enhanced with web UI capabilities.
 
-> **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository. 
+> **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository with web UI enhancements and rebranding. 
 
 ⚡️ Delivers core agent functionality in just **~4,000** lines of code — **99% smaller** than Clawdbot's 430k+ lines.
 
@@ -22,7 +22,7 @@
 
 ## 📢 News
 
-- **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `nanobot web` to start a modern web-based chat interface.
+- **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `pocketbot web` to start a modern web-based chat interface.
 - **2026-02-14** 🔌 nanobot now supports MCP! See [MCP section](#mcp-model-context-protocol) for details.
 - **2026-02-13** 🎉 Released v0.1.3.post7 — includes security hardening and multiple improvements. All users are recommended to upgrade to the latest version. See [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post7) for more details.
 - **2026-02-12** 🧠 Redesigned memory system — Less code, more reliable. Join the [discussion](https://github.com/HKUDS/nanobot/discussions/566) about it!
@@ -37,9 +37,11 @@
 - **2026-02-03** ⚡ Integrated vLLM for local LLM support and improved natural language task scheduling!
 - **2026-02-02** 🎉 nanobot officially launched! Welcome to try 🐈 nanobot!
 
-## Key Features of nanobot:
+## Key Features of pocketbot:
 
-🪶 **Ultra-Lightweight**: Just ~4,000 lines of core agent code — 99% smaller than Clawdbot.
+� **Pocket-Sized**: Small enough to run anywhere with minimal resources.
+
+🌐 **Web Interface**: Modern web UI with real-time chat and responsive design.
 
 🔬 **Research-Ready**: Clean, readable code that's easy to understand, modify, and extend for research.
 
@@ -93,28 +95,28 @@ pip install -e .
 **Install with [uv](https://github.com/astral-sh/uv)** (stable, fast)
 
 ```bash
-uv tool install nanobot-ai
+uv tool install pocketbot-ai
 ```
 
 **Install from PyPI** (stable)
 
 ```bash
-pip install nanobot-ai
+pip install pocketbot-ai
 ```
 
 ## 🚀 Quick Start
 
 > [!TIP]
-> Set your API key in `~/.nanobot/config.json`.
+> Set your API key in `~/.pocketbot/config.json`.
 > Get API keys: [OpenRouter](https://openrouter.ai/keys) (Global) · [Brave Search](https://brave.com/search/api/) (optional, for web search)
 
 **1. Initialize**
 
 ```bash
-nanobot onboard
+pocketbot onboard
 ```
 
-**2. Configure** (`~/.nanobot/config.json`)
+**2. Configure** (`~/.pocketbot/config.json`)
 
 Add or merge these **two parts** into your config (other options have defaults).
 
@@ -143,14 +145,14 @@ Add or merge these **two parts** into your config (other options have defaults).
 **3. Chat**
 
 ```bash
-nanobot agent
+pocketbot agent
 ```
 
 That's it! You have a working AI assistant in 2 minutes.
 
 ## 💬 Chat Apps
 
-Talk to your nanobot through a modern **web UI**, Telegram, Discord, WhatsApp, Feishu, Mochat, DingTalk, Slack, Email, or QQ — anytime, anywhere.
+Talk to your pocketbot through a modern **web UI**, Telegram, Discord, WhatsApp, Feishu, Mochat, DingTalk, Slack, Email, or QQ — anytime, anywhere.
 
 | Channel | Setup |
 |---------|-------|
@@ -173,12 +175,12 @@ A modern, responsive web interface built with FastAPI, WebSocket, and Tailwind C
 **1. Start the web server**
 
 ```bash
-nanobot web
+pocketbot web
 ```
 
 **2. Configure (optional)**
 
-Add web settings to `~/.nanobot/config.json`:
+Add web settings to `~/.pocketbot/config.json`:
 
 ```json
 {
