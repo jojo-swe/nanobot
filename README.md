@@ -842,29 +842,31 @@ pocketbot cron remove <job_id>
 ## 🐳 Docker
 
 > [!TIP]
-> The `-v ~/.pocketbot:/root/.nanobot` flag mounts your local config directory into the container, so your config and workspace persist across container restarts.
+> The `-v ~/.pocketbot:/root/.pocketbot` flag mounts your local config directory into the container, so your config and workspace persist across container restarts.
 
-Build and run nanobot in a container:
+Build and run pocketbot in a container:
 
 ```bash
 # Build the image
-docker build -t nanobot .
+docker build -t pocketbot .
 
 # Initialize config (first time only)
-docker run -v ~/.pocketbot:/root/.nanobot --rm nanobot onboard
+docker run -v ~/.pocketbot:/root/.pocketbot --rm pocketbot onboard
 
 # Edit config on host to add API keys
 vim ~/.pocketbot/config.json
 
 # Run gateway (connects to enabled channels, e.g. Telegram/Discord/Mochat)
-docker run -v ~/.pocketbot:/root/.nanobot -p 18790:18790 pocketbot gateway
+docker run -v ~/.pocketbot:/root/.pocketbot -p 18790:18790 pocketbot gateway
 
 # Or run a single command
-docker run -v ~/.pocketbot:/root/.nanobot --rm nanobot agent -m "Hello!"
-docker run -v ~/.pocketbot:/root/.nanobot --rm nanobot status
+docker run -v ~/.pocketbot:/root/.pocketbot --rm pocketbot agent -m "Hello!"
+docker run -v ~/.pocketbot:/root/.pocketbot --rm pocketbot status
 ```
 
 ## 📁 Project Structure
+
+> **Note**: The internal package structure remains `nanobot/` to maintain compatibility with the original project and make upstream syncing easier.
 
 ```
 nanobot/
