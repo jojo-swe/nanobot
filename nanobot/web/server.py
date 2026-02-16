@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from loguru import logger
 
@@ -47,6 +48,15 @@ def create_app(
         Configured FastAPI application.
     """
     app = FastAPI(title="pocketbot", docs_url="/api/docs")
+
+    # Allow companion app / other origins to call the API
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # Track active WebSocket connections: ws_id -> WebSocket
     connections: dict[str, WebSocket] = {}

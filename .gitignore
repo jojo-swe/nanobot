@@ -20,3 +20,13 @@ poetry.lock
 .pytest_cache/
 botpy.log
 tests/
+
+pocketbot-app/node_modules
+pocketbot-app/build
+pocketbot-app/.expo
+pocketbot-app/.vscode
+pocketbot-app/ios/build
+pocketbot-app/android/app/build
+pocketbot-app/android/app/src/main/assets
+pocketbot-app/android/app/src/main/res
+pocketbot-app*
