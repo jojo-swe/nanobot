@@ -20,6 +20,7 @@
 
 ## 📢 News
 
+- **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `nanobot web` to start a modern web-based chat interface.
 - **2026-02-14** 🔌 nanobot now supports MCP! See [MCP section](#mcp-model-context-protocol) for details.
 - **2026-02-13** 🎉 Released v0.1.3.post7 — includes security hardening and multiple improvements. All users are recommended to upgrade to the latest version. See [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post7) for more details.
 - **2026-02-12** 🧠 Redesigned memory system — Less code, more reliable. Join the [discussion](https://github.com/HKUDS/nanobot/discussions/566) about it!
@@ -72,6 +73,10 @@
     <td align="center">Learn • Memory • Reasoning</td>
   </tr>
 </table>
+
+<p align="center">
+  <img src="case/gui.png" alt="nanobot web UI" width="800">
+</p>
 
 ## 📦 Install
 
@@ -143,10 +148,11 @@ That's it! You have a working AI assistant in 2 minutes.
 
 ## 💬 Chat Apps
 
-Talk to your nanobot through Telegram, Discord, WhatsApp, Feishu, Mochat, DingTalk, Slack, Email, or QQ — anytime, anywhere.
+Talk to your nanobot through a modern **web UI**, Telegram, Discord, WhatsApp, Feishu, Mochat, DingTalk, Slack, Email, or QQ — anytime, anywhere.
 
 | Channel | Setup |
 |---------|-------|
+| **Web UI** | Easy (built-in, no setup required) |
 | **Telegram** | Easy (just a token) |
 | **Discord** | Easy (bot token + intents) |
 | **WhatsApp** | Medium (scan QR) |
@@ -156,6 +162,53 @@ Talk to your nanobot through Telegram, Discord, WhatsApp, Feishu, Mochat, DingTa
 | **Slack** | Medium (bot + app tokens) |
 | **Email** | Medium (IMAP/SMTP credentials) |
 | **QQ** | Easy (app credentials) |
+
+<details>
+<summary><b>Web UI</b></summary>
+
+A modern, responsive web interface built with FastAPI, WebSocket, and Tailwind CSS. Features real-time chat, Markdown rendering, syntax highlighting, and typing indicators.
+
+**1. Start the web server**
+
+```bash
+nanobot web
+```
+
+**2. Configure (optional)**
+
+Add web settings to `~/.nanobot/config.json`:
+
+```json
+{
+  "web": {
+    "enabled": true,
+    "host": "localhost",
+    "port": 8080,
+    "auth": {
+      "enabled": false,
+      "token": ""
+    }
+  }
+}
+```
+
+**3. Access the UI**
+
+Open your browser to `http://localhost:8080`
+
+**Features:**
+- Real-time WebSocket chat
+- Markdown rendering with syntax highlighting
+- Responsive design for desktop and mobile
+- Typing indicators
+- Session management
+- Configuration panel
+- No setup required for basic use
+
+**Authentication (optional):**
+Enable token-based auth by setting `"auth.enabled": true` and providing a token. The UI will prompt for the bearer token on load.
+
+</details>
 
 <details>
 <summary><b>Telegram</b> (Recommended)</summary>
@@ -778,6 +831,7 @@ MCP tools are automatically discovered and registered on startup. The LLM can us
 | `nanobot agent` | Interactive chat mode |
 | `nanobot agent --no-markdown` | Show plain-text replies |
 | `nanobot agent --logs` | Show runtime logs during chat |
+| `nanobot web` | Start the web UI server |
 | `nanobot gateway` | Start the gateway |
 | `nanobot status` | Show status |
 | `nanobot provider login openai-codex` | OAuth login for providers |
@@ -841,6 +895,7 @@ nanobot/
 │   └── tools/      #    Built-in tools (incl. spawn)
 ├── skills/         # 🎯 Bundled skills (github, weather, tmux...)
 ├── channels/       # 📱 Chat channel integrations
+├── web/            # 🌐 Web UI server and static files
 ├── bus/            # 🚌 Message routing
 ├── cron/           # ⏰ Scheduled tasks
 ├── heartbeat/      # 💓 Proactive wake-up

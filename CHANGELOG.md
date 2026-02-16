@@ -1,0 +1,151 @@
+# Changelog
+
+All notable changes to nanobot will be documented in this file.
+
+## [2026-02-16] - Web UI Release
+
+### 🌐 Added
+- **Web UI with FastAPI server** - Modern web-based chat interface
+- **WebSocket chat endpoint** - Real-time bidirectional communication
+- **Static HTML interface** - Responsive design with Tailwind CSS
+- **Markdown rendering** - Support for formatted responses with syntax highlighting
+- **Typing indicators** - Visual feedback when agent is processing
+- **Session management** - Persistent conversation sessions
+- **Configuration panel** - View current model and settings
+- **Authentication support** - Optional bearer token authentication
+- **CLI command** - `nanobot web` to start the web server
+
+### 🔧 Configuration
+- Added `web` configuration section with:
+  - `host` - Server bind address (default: localhost)
+  - `port` - Server port (default: 8080)
+  - `auth.enabled` - Enable authentication (default: false)
+  - `auth.token` - Bearer token for authentication
+
+### 📦 Dependencies
+- Added `fastapi>=0.110.0` - Web framework
+- Added `uvicorn[standard]>=0.27.0` - ASGI server
+
+### 📁 Files Added
+- `nanobot/web/__init__.py` - Web module initialization
+- `nanobot/web/server.py` - FastAPI server implementation
+- `nanobot/web/static/index.html` - Web UI interface
+- Updated `nanobot/cli/commands.py` - Added web command
+- Updated `nanobot/config/schema.py` - Added web configuration schema
+- Updated `pyproject.toml` - Added dependencies and static files
+
+---
+
+## [2026-02-14] - MCP Support
+
+### 🔌 Added
+- **MCP (Model Context Protocol) support** - Connect external tool servers
+- **Stdio transport** - Local process communication via npx/uvx
+- **HTTP transport** - Remote endpoint communication
+- **Auto-discovery** - MCP tools automatically registered on startup
+- **Claude Desktop compatibility** - Copy configs directly from MCP server docs
+
+---
+
+## [2026-02-13] - v0.1.3.post7
+
+### 🔒 Security
+- Enhanced security hardening
+- Multiple stability improvements
+
+---
+
+## [2026-02-12] - Memory System Redesign
+
+### 🧠 Improved
+- **Redesigned memory system** - Less code, more reliable
+- Simplified memory persistence
+- Enhanced context management
+
+---
+
+## [2026-02-11] - CLI Enhancement & MiniMax
+
+### ✨ Added
+- **Enhanced CLI experience** - Improved user interface
+- **MiniMax provider support** - Access to MiniMax models
+
+---
+
+## [2026-02-10] - v0.1.3.post6
+
+### 🎉 Released
+- Multiple improvements and bug fixes
+- Updated roadmap documentation
+
+---
+
+## [2026-02-09] - Multi-Platform Support
+
+### 💬 Added
+- **Slack integration** - Socket Mode support
+- **Email channel** - IMAP/SMTP support
+- **QQ integration** - Bot API support
+
+---
+
+## [2026-02-08] - Provider Refactoring
+
+### 🔧 Improved
+- **Refactored Providers** - Simplified adding new LLM providers
+- **2-step provider addition** - No more if-elif chains
+- **Provider Registry** - Centralized provider configuration
+
+---
+
+## [2026-02-07] - v0.1.3.post5
+
+### 🚀 Added
+- **Qwen provider support** - Dashscope integration
+- Multiple key improvements
+
+---
+
+## [2026-02-06] - Discord & Moonshot
+
+### ✨ Added
+- **Discord integration** - Full bot support with intents
+- **Moonshot/Kimi provider** - Access to Kimi models
+- **Enhanced security** - Additional hardening
+
+---
+
+## [2026-02-05] - Feishu & DeepSeek
+
+### ✨ Added
+- **Feishu channel** - WebSocket long connection support
+- **DeepSeek provider** - Direct DeepSeek API access
+- **Enhanced scheduled tasks** - Improved cron functionality
+
+---
+
+## [2026-02-04] - v0.1.3.post4
+
+### 🚀 Added
+- **Multi-provider support** - Simultaneous provider configuration
+- **Docker support** - Containerized deployment
+
+---
+
+## [2026-02-03] - vLLM & Scheduling
+
+### ⚡ Added
+- **vLLM integration** - Local LLM server support
+- **Natural language scheduling** - Enhanced task scheduling
+
+---
+
+## [2026-02-02] - Initial Release
+
+### 🎉 Launch
+- **nanobot v0.1.3** - Ultra-lightweight personal AI assistant
+- Core agent functionality in ~4,000 lines of code
+- Multi-channel support (Telegram, WhatsApp, etc.)
+- Complete CLI interface
+- Configuration management
+- Session handling
