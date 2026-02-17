@@ -15,8 +15,6 @@
 
 > **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository with web UI enhancements and rebranding.
 
-⚡️ Delivers core agent functionality in just **~4,000** lines of code — **99% smaller** than Clawdbot's 430k+ lines.
-
 ## 📢 News
 
 - **2026-02-17** � Companion app MVP (Expo React Native) — chat, status, settings screens.
