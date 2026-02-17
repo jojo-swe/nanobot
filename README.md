@@ -13,11 +13,18 @@
 
 🤖 **pocketbot** is a **pocket-sized** personal AI assistant with a modern web interface, forked from [nanobot](https://github.com/HKUDS/nanobot) and enhanced with web UI capabilities.
 
-> **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository with web UI enhancements and rebranding. 
+> **Note**: This is a fork of the original [HKUDS/nanobot](https://github.com/HKUDS/nanobot) repository with web UI enhancements and rebranding.
+
+⚡️ Delivers core agent functionality in just **~4,000** lines of code — **99% smaller** than Clawdbot's 430k+ lines.
 
 ## 📢 News
 
-- **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `pocketbot web` to start a modern web-based chat interface.
+- **2026-02-17** � Companion app MVP (Expo React Native) — chat, status, settings screens.
+- **2026-02-17** 🏷️ Centralized fork identity (`identity.py`) — all paths now fork-safe.
+- **2026-02-16** 🌐 Added web UI with FastAPI server and WebSocket chat interface! Use `pocketbot web` to start.
+- **2026-02-16** 🦞 Integrated [ClawHub](https://clawhub.ai) skill — search and install public agent skills.
+- **2026-02-15** 🔑 Added OpenAI Codex provider with OAuth login support.
+- **2026-02-15** 🔑 Added GitHub Copilot provider support.
 - **2026-02-14** 🔌 pocketbot now supports MCP! See [MCP section](#mcp-model-context-protocol) for details.
 - **2026-02-13** 🎉 Released v0.1.3.post7 — includes security hardening and multiple improvements. All users are recommended to upgrade to the latest version. See [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post7) for more details.
 - **2026-02-12** 🧠 Redesigned memory system — Less code, more reliable. Join the [discussion](https://github.com/HKUDS/nanobot/discussions/566) about it!
@@ -116,18 +123,18 @@ That's it! You have a working AI assistant in 2 minutes.
 
 Talk to your pocketbot through a modern **web UI**, Telegram, Discord, WhatsApp, Feishu, Mochat, DingTalk, Slack, Email, or QQ — anytime, anywhere.
 
-| Channel | Setup |
-|---------|-------|
-| **Web UI** | Easy (built-in, no setup required) |
-| **Telegram** | Easy (just a token) |
-| **Discord** | Easy (bot token + intents) |
-| **WhatsApp** | Medium (scan QR) |
-| **Feishu** | Medium (app credentials) |
-| **Mochat** | Medium (claw token + websocket) |
-| **DingTalk** | Medium (app credentials) |
-| **Slack** | Medium (bot + app tokens) |
-| **Email** | Medium (IMAP/SMTP credentials) |
-| **QQ** | Easy (app credentials) |
+| Channel | What you need |
+|---------|---------------|
+| **Web UI** | Built-in — no setup required |
+| **Telegram** | Bot token from @BotFather |
+| **Discord** | Bot token + Message Content intent |
+| **WhatsApp** | QR code scan |
+| **Feishu** | App ID + App Secret |
+| **Mochat** | Claw token (auto-setup available) |
+| **DingTalk** | App Key + App Secret |
+| **Slack** | Bot token + App-Level token |
+| **Email** | IMAP/SMTP credentials |
+| **QQ** | App ID + App Secret |
 
 <details>
 <summary><b>Web UI</b></summary>
@@ -605,6 +612,7 @@ Config file: `~/.pocketbot/config.json`
 | `zhipu` | LLM (Zhipu GLM) | [open.bigmodel.cn](https://open.bigmodel.cn) |
 | `vllm` | LLM (local, any OpenAI-compatible server) | — |
 | `openai_codex` | LLM (Codex, OAuth) | `pocketbot provider login openai-codex` |
+| `github_copilot` | LLM (GitHub Copilot, OAuth) | Requires [GitHub Copilot](https://github.com/features/copilot) subscription |
 
 <details>
 <summary><b>OpenAI Codex (OAuth)</b></summary>
