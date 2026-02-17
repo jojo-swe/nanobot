@@ -16,11 +16,13 @@ docs/
 .venv/
 venv/
 __pycache__/
+
 poetry.lock
 .pytest_cache/
 botpy.log
 tests/
 
+# pocketbot-app dependencies and build files
 pocketbot-app/node_modules
 pocketbot-app/build
 pocketbot-app/.expo
@@ -29,4 +31,12 @@ pocketbot-app/ios/build
 pocketbot-app/android/app/build
 pocketbot-app/android/app/src/main/assets
 pocketbot-app/android/app/src/main/res
-pocketbot-app*
+
+# pocketbot-app sensitive files
+pocketbot-app/.env*
+pocketbot-app/*.pem
+pocketbot-app/*.p8
+pocketbot-app/*.p12
+pocketbot-app/*.key
+pocketbot-app/*.jks
+pocketbot-app/*.mobileprovision
