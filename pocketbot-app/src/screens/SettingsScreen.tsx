@@ -101,6 +101,54 @@ export default function SettingsScreen() {
     });
   }, [config]);
 
+  const [rotating, setRotating] = useState(false);
+  const [rotatedToken, setRotatedToken] = useState('');
+
+  const handleRotateToken = useCallback(async () => {
+    Alert.alert(
+      'Rotate Auth Token',
+      'This will generate a new token and invalidate the current one. You will need to update all connected clients.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Rotate',
+          style: 'destructive',
+          onPress: async () => {
+            setRotating(true);
+            setRotatedToken('');
+            setError('');
+            try {
+              const base = conn.url.replace(/\/+$/, '');
+              const headers: Record<string, string> = {
+                'Content-Type': 'application/json',
+              };
+              if (conn.token) headers['Authorization'] = `Bearer ${conn.token}`;
+              const res = await fetch(`${base}/api/auth/rotate`, {
+                method: 'POST',
+                headers,
+              });
+              if (!res.ok) {
+                const d = await res.json().catch(() => ({}));
+                throw new Error((d as any).detail || `HTTP ${res.status}`);
+              }
+              const data = await res.json() as { token: string };
+              setRotatedToken(data.token);
+              Alert.alert(
+                'Token Rotated',
+                `New token:\n\n${data.token}\n\nUpdate your app connection settings with this token.`,
+                [{ text: 'OK' }],
+              );
+            } catch (e: unknown) {
+              setError(e instanceof Error ? e.message : 'Rotation failed');
+            } finally {
+              setRotating(false);
+            }
+          },
+        },
+      ],
+    );
+  }, [conn]);
+
   const handleDisconnect = useCallback(() => {
     Alert.alert(
       'Disconnect',
@@ -182,6 +230,26 @@ export default function SettingsScreen() {
           />
         </View>
       )}
+
+      {/* Security section */}
+      <Text style={[styles.sectionTitle, { marginTop: spacing.xxl }]}>Security</Text>
+      <TouchableOpacity
+        style={styles.rotateBtn}
+        onPress={handleRotateToken}
+        disabled={rotating}
+        activeOpacity={0.7}
+      >
+        {rotating ? (
+          <ActivityIndicator color={colors.warning} size="small" />
+        ) : (
+          <Text style={styles.rotateBtnText}>🔑 Rotate Auth Token</Text>
+        )}
+      </TouchableOpacity>
+      {rotatedToken ? (
+        <Text style={styles.rotatedToken} selectable>
+          New token: {rotatedToken}
+        </Text>
+      ) : null}
 
       <TouchableOpacity
         style={styles.disconnectBtn}
@@ -309,6 +377,27 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textSecondary,
     fontFamily: 'monospace',
+  },
+  rotateBtn: {
+    backgroundColor: 'rgba(245,158,11,0.1)',
+    borderRadius: radius.md,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(245,158,11,0.3)',
+    marginBottom: spacing.sm,
+  },
+  rotateBtnText: {
+    color: colors.warning,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  rotatedToken: {
+    fontSize: 11,
+    color: colors.textMuted,
+    fontFamily: 'monospace',
+    marginBottom: spacing.md,
+    lineHeight: 16,
   },
   disconnectBtn: {
     marginTop: spacing.xxl,

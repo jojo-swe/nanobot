@@ -81,6 +81,16 @@ def create_app(
         allow_headers=["*"],
     )
 
+    # Warn at startup if auth is disabled and server is non-local
+    if config and not config.web.auth.enabled:
+        host = config.web.host
+        if host not in ("localhost", "127.0.0.1", "::1"):
+            logger.warning(
+                "⚠️  pocketbot web auth is DISABLED while binding to "
+                f"{host}. Anyone on the network can access your agent. "
+                "Set web.auth.enabled=true and web.auth.token in config."
+            )
+
     # Track active WebSocket connections: ws_id -> WebSocket
     connections: dict[str, WebSocket] = {}
     # Map ws_id -> pending response futures
@@ -209,6 +219,32 @@ def create_app(
     async def api_ping():
         """Simple health-check endpoint."""
         return {"pong": True, "timestamp": _timestamp()}
+
+    @app.post("/api/auth/rotate", dependencies=[auth_dep])
+    async def api_auth_rotate():
+        """Generate a new random auth token, persist it, and return it.
+
+        The caller must immediately update their stored token — the old one
+        is invalidated as soon as this response is received.
+        """
+        import secrets
+        if not config:
+            raise HTTPException(status_code=503, detail="Config not available")
+        if not config.web.auth.enabled:
+            raise HTTPException(
+                status_code=400,
+                detail="Auth is not enabled. Enable web.auth in config first.",
+            )
+        new_token = secrets.token_urlsafe(32)
+        config.web.auth.token = new_token
+        try:
+            from nanobot.config.loader import save_config
+            save_config(config)
+        except Exception as e:
+            logger.error(f"Failed to persist rotated token: {e}")
+            raise HTTPException(status_code=500, detail="Failed to persist token")
+        logger.info("Auth token rotated successfully")
+        return {"token": new_token, "rotated": True}
 
     @app.get("/api/pair")
     async def api_pair(request: Request):
@@ -367,6 +403,8 @@ def create_app(
         session_key = f"web:{ws_id}"
         logger.info(f"WebSocket connected: {ws_id}")
 
+        _WS_IDLE_TIMEOUT = 1800  # 30 minutes
+
         try:
             # Send welcome
             await ws.send_json({
@@ -375,7 +413,17 @@ def create_app(
             })
 
             while True:
-                raw = await ws.receive_text()
+                try:
+                    raw = await asyncio.wait_for(
+                        ws.receive_text(),
+                        timeout=_WS_IDLE_TIMEOUT,
+                    )
+                except asyncio.TimeoutError:
+                    logger.info(
+                        f"WebSocket idle timeout ({ws_id}), closing"
+                    )
+                    await ws.close(code=1001, reason="Idle timeout")
+                    break
                 try:
                     data = json.loads(raw)
                 except json.JSONDecodeError:

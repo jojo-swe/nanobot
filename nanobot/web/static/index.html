@@ -237,6 +237,10 @@
                 <p id="cfgAuth" class="mt-0.5 font-mono text-xs">—</p>
               </div>
             </div>
+            <div class="mt-3 flex items-center gap-2">
+              <button onclick="rotateToken()" id="rotateTokenBtn" class="text-xs px-3 py-1.5 rounded-md bg-amber-900/40 text-amber-400 border border-amber-700/40 hover:bg-amber-900/60 transition-colors">🔑 Rotate Auth Token</button>
+              <span id="rotateTokenMsg" class="text-xs text-slate-500 hidden"></span>
+            </div>
             <p id="settingsMsg" class="hidden mt-2 text-xs"></p>
           </div>
 
@@ -553,6 +557,33 @@
           }
         } catch (e) {
           showToast(`Save failed: ${e.message}`, "error");
+        }
+      }
+
+      async function rotateToken() {
+        const btn = document.getElementById("rotateTokenBtn");
+        const msg = document.getElementById("rotateTokenMsg");
+        btn.disabled = true;
+        btn.textContent = "Rotating…";
+        msg.classList.add("hidden");
+        try {
+          const res = await fetch("/api/auth/rotate", { method: "POST" });
+          if (!res.ok) {
+            const d = await res.json().catch(() => ({}));
+            throw new Error(d.detail || `HTTP ${res.status}`);
+          }
+          const data = await res.json();
+          msg.textContent = `New token: ${data.token}`;
+          msg.className = "text-xs text-emerald-400 font-mono break-all";
+          msg.classList.remove("hidden");
+          showToast("Token rotated — update your app!", "warning");
+        } catch (e) {
+          msg.textContent = `Failed: ${e.message}`;
+          msg.className = "text-xs text-red-400";
+          msg.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "🔑 Rotate Auth Token";
         }
       }
 
