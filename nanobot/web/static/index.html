@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/highlight.min.js"></script>
     <script>
@@ -129,6 +130,9 @@
             </button>
             <button onclick="showPanel('settings')" title="Settings" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
+            <button onclick="showPairModal()" title="Pair mobile app" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             </button>
             <button onclick="newSession()" title="New chat" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -294,6 +298,23 @@
     <!-- Toast container -->
     <div id="toastContainer" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center"></div>
 
+    <!-- Pair modal -->
+    <div id="pairModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onclick="hidePairModal()">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-xs w-full mx-4 shadow-2xl" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-semibold text-white">Pair Mobile App</h2>
+          <button onclick="hidePairModal()" class="text-slate-400 hover:text-white transition-colors">&times;</button>
+        </div>
+        <p class="text-xs text-slate-400 mb-4">Scan this QR code with the pocketbot app to connect automatically.</p>
+        <div id="pairQr" class="flex justify-center mb-4">
+          <canvas id="pairQrCanvas"></canvas>
+        </div>
+        <div id="pairUrl" class="text-center text-xs text-slate-500 font-mono break-all"></div>
+        <div id="pairError" class="hidden text-center text-xs text-red-400 mt-2"></div>
+        <button onclick="hidePairModal()" class="mt-4 w-full py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm transition-colors">Close</button>
+      </div>
+    </div>
+
     <script>
       // =========================================================================
       // State
@@ -414,6 +435,39 @@
           stPing.textContent = "failed";
           stPing.className = "mt-0.5 font-mono text-xs text-red-400";
         }
+      }
+
+      // =========================================================================
+      // Pair modal (QR code)
+      // =========================================================================
+      async function showPairModal() {
+        document.getElementById("pairModal").classList.remove("hidden");
+        document.getElementById("pairError").classList.add("hidden");
+        document.getElementById("pairUrl").textContent = "";
+        const canvas = document.getElementById("pairQrCanvas");
+        // Clear previous
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        try {
+          const res = await fetch("/api/pair");
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          const payload = JSON.stringify(data);
+          await QRCode.toCanvas(canvas, payload, {
+            width: 220,
+            margin: 1,
+            color: { dark: "#e2e8f0", light: "#0f172a" },
+          });
+          document.getElementById("pairUrl").textContent = data.url;
+        } catch (e) {
+          const errEl = document.getElementById("pairError");
+          errEl.textContent = `Failed to load pairing data: ${e.message}`;
+          errEl.classList.remove("hidden");
+        }
+      }
+
+      function hidePairModal() {
+        document.getElementById("pairModal").classList.add("hidden");
       }
 
       function formatUptime(seconds) {

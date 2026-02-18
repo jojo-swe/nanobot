@@ -210,6 +210,26 @@ def create_app(
         """Simple health-check endpoint."""
         return {"pong": True, "timestamp": _timestamp()}
 
+    @app.get("/api/pair")
+    async def api_pair(request: Request):
+        """Return a pairing payload for QR-based device setup.
+
+        No auth required — the payload itself contains the token (if any),
+        so the QR code is the credential. Only expose on trusted networks.
+        """
+        host = request.headers.get("host", "localhost")
+        scheme = "https" if request.url.scheme == "https" else "http"
+        server_url = f"{scheme}://{host}"
+        token = ""
+        if config and config.web.auth.enabled:
+            token = config.web.auth.token or ""
+        return {
+            "pocketbot": True,
+            "url": server_url,
+            "token": token,
+            "version": _get_version(),
+        }
+
     # -------------------------------------------------------------------
     # File upload / media serving
     # -------------------------------------------------------------------

@@ -10,9 +10,11 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, radius } from '../theme';
 import { useConnection } from '../context/ConnectionContext';
 import { testConnection } from '../services/api';
+import QrScanScreen from './QrScanScreen';
 
 export default function ConnectScreen() {
   const { conn, setConn } = useConnection();
@@ -20,6 +22,7 @@ export default function ConnectScreen() {
   const [token, setToken] = useState(conn.token || '');
   const [testing, setTesting] = useState(false);
   const [error, setError] = useState('');
+  const [scanning, setScanning] = useState(false);
 
   const handleConnect = async () => {
     const trimmed = url.trim().replace(/\/+$/, '');
@@ -38,6 +41,30 @@ export default function ConnectScreen() {
     await setConn({ url: trimmed, token: token.trim() });
   };
 
+  const handlePaired = async (pairedUrl: string, pairedToken: string) => {
+    setScanning(false);
+    setUrl(pairedUrl);
+    setToken(pairedToken);
+    setError('');
+    setTesting(true);
+    const ok = await testConnection({ url: pairedUrl, token: pairedToken });
+    setTesting(false);
+    if (!ok) {
+      setError('Scanned server is unreachable. Check your network.');
+      return;
+    }
+    await setConn({ url: pairedUrl, token: pairedToken });
+  };
+
+  if (scanning) {
+    return (
+      <QrScanScreen
+        onPaired={handlePaired}
+        onCancel={() => setScanning(false)}
+      />
+    );
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -52,6 +79,22 @@ export default function ConnectScreen() {
         <Text style={styles.subtitle}>
           Connect to your pocketbot server to get started.
         </Text>
+
+        {/* QR scan shortcut */}
+        <TouchableOpacity
+          style={styles.qrButton}
+          onPress={() => setScanning(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="qr-code-outline" size={20} color={colors.pocket[400]} />
+          <Text style={styles.qrButtonText}>Scan QR to pair</Text>
+        </TouchableOpacity>
+
+        <View style={styles.dividerRow}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or enter manually</Text>
+          <View style={styles.dividerLine} />
+        </View>
 
         <View style={styles.card}>
           <Text style={styles.label}>Server URL</Text>
@@ -99,7 +142,7 @@ export default function ConnectScreen() {
         <Text style={styles.hint}>
           Start your server with{' '}
           <Text style={styles.code}>pocketbot web</Text>
-          {'\n'}then enter its address above.
+          {'\n'}then tap the 📱 icon in the web UI to pair.
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -184,5 +227,39 @@ const styles = StyleSheet.create({
   code: {
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     color: colors.pocket[400],
+  },
+  qrButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.pocket[600],
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  qrButtonText: {
+    color: colors.pocket[400],
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: spacing.lg,
+    gap: spacing.sm,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    fontSize: 12,
+    color: colors.textMuted,
   },
 });
