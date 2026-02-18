@@ -9,9 +9,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException, Depends
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from loguru import logger
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
@@ -209,6 +209,61 @@ def create_app(
     async def api_ping():
         """Simple health-check endpoint."""
         return {"pong": True, "timestamp": _timestamp()}
+
+    # -------------------------------------------------------------------
+    # File upload / media serving
+    # -------------------------------------------------------------------
+
+    _ALLOWED_MIME_PREFIXES = ("image/", "text/plain", "application/pdf")
+    _MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # 20 MB
+
+    @app.post("/api/upload", dependencies=[auth_dep])
+    async def api_upload(file: UploadFile = File(...)):
+        """Upload a file (image or document) and return its URL."""
+        content_type = file.content_type or ""
+        if not any(content_type.startswith(p) for p in _ALLOWED_MIME_PREFIXES):
+            raise HTTPException(
+                status_code=415,
+                detail=f"Unsupported media type: {content_type}",
+            )
+
+        from nanobot.identity import MEDIA_DIR
+        media_dir = MEDIA_DIR
+        media_dir.mkdir(parents=True, exist_ok=True)
+
+        # Sanitise filename and make unique
+        original = Path(file.filename or "upload").name
+        stem = original.rsplit(".", 1)[0][:40]
+        suffix = Path(original).suffix or ""
+        unique_name = f"{stem}_{uuid.uuid4().hex[:8]}{suffix}"
+        dest = media_dir / unique_name
+
+        data = await file.read(_MAX_UPLOAD_BYTES + 1)
+        if len(data) > _MAX_UPLOAD_BYTES:
+            raise HTTPException(
+                status_code=413,
+                detail="File too large (max 20 MB)",
+            )
+        dest.write_bytes(data)
+        logger.info(f"Uploaded: {unique_name} ({len(data)} bytes)")
+        return {
+            "filename": unique_name,
+            "url": f"/api/media/{unique_name}",
+            "size": len(data),
+            "content_type": content_type,
+        }
+
+    @app.get("/api/media/{filename}", dependencies=[auth_dep])
+    async def api_media(filename: str):
+        """Serve an uploaded media file."""
+        from nanobot.identity import MEDIA_DIR
+        path = MEDIA_DIR / filename
+        # Prevent path traversal
+        if not path.resolve().is_relative_to(MEDIA_DIR.resolve()):
+            raise HTTPException(status_code=400, detail="Invalid filename")
+        if not path.exists():
+            raise HTTPException(status_code=404, detail="File not found")
+        return FileResponse(path)
 
     # -------------------------------------------------------------------
     # Push notification support (Expo Push)

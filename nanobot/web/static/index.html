@@ -80,6 +80,13 @@
 
       #chatInput { max-height: 200px; }
 
+      /* Attachment preview strip */
+      .attach-thumb { position: relative; display: inline-block; }
+      .attach-thumb img { width: 56px; height: 56px; object-fit: cover; border-radius: 0.5rem; border: 1px solid #334155; }
+      .attach-thumb .remove-btn { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: white; line-height: 1; }
+      .msg-image { max-width: 280px; max-height: 220px; border-radius: 0.75rem; border: 1px solid #334155; cursor: pointer; margin-top: 0.25rem; display: block; }
+      .msg-file { display: inline-flex; align-items: center; gap: 0.5rem; background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 0.4rem 0.75rem; font-size: 0.8rem; color: #94a3b8; text-decoration: none; margin-top: 0.25rem; }
+
       /* Panel tab styling */
       .panel-tab { transition: all 0.15s; }
       .panel-tab.active { color: #e2e8f0; border-bottom-color: #0ea5e9; }
@@ -264,7 +271,14 @@
       <!-- Input area -->
       <footer class="flex-shrink-0 border-t border-slate-800 bg-slate-950/80 backdrop-blur-sm">
         <div class="max-w-4xl mx-auto px-4 py-3">
+          <!-- Attachment preview strip -->
+          <div id="attachPreview" class="hidden flex gap-2 flex-wrap mb-2"></div>
+          <!-- Hidden file input -->
+          <input type="file" id="fileInput" accept="image/*,.pdf,.txt" class="hidden" multiple />
           <form id="chatForm" onsubmit="handleSubmit(event)" class="flex items-end gap-2">
+            <button type="button" id="attachBtn" title="Attach file" aria-label="Attach file" onclick="document.getElementById('fileInput').click()" class="flex-shrink-0 p-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+            </button>
             <div class="flex-1 relative">
               <textarea id="chatInput" rows="1" placeholder="Type your message... (Shift+Enter for new line)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-pocket-500 focus:ring-1 focus:ring-pocket-500 resize-none transition-colors"></textarea>
             </div>
@@ -272,7 +286,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </form>
-          <p class="text-center text-xs text-slate-600 mt-2">pocketbot &middot; WebSocket</p>
+          <p class="text-center text-xs text-slate-600 mt-2">pocketbot &middot; WebSocket &middot; <span id="attachCount" class="hidden"><span id="attachCountNum">0</span> file(s) attached</span></p>
         </div>
       </footer>
     </div>
@@ -295,6 +309,9 @@
       let originalConfig = {};
       let activePanel = null; // 'status' | 'settings' | null
 
+      // Pending attachments: [{file, localUrl, serverUrl, contentType}]
+      let pendingAttachments = [];
+
       // =========================================================================
       // DOM refs
       // =========================================================================
@@ -306,6 +323,10 @@
       const sendBtn = document.getElementById("sendBtn");
       const statusBadge = document.getElementById("statusBadge");
       const panelContainer = document.getElementById("panelContainer");
+      const fileInput = document.getElementById("fileInput");
+      const attachPreview = document.getElementById("attachPreview");
+      const attachCount = document.getElementById("attachCount");
+      const attachCountNum = document.getElementById("attachCountNum");
 
       // =========================================================================
       // Markdown setup
@@ -570,17 +591,101 @@
       function handleSubmit(e) {
         e.preventDefault();
         const content = inputEl.value.trim();
-        if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
-        sendMessage(content);
+        const hasAttachments = pendingAttachments.length > 0;
+        if ((!content && !hasAttachments) || !ws || ws.readyState !== WebSocket.OPEN) return;
+        sendMessage(content, [...pendingAttachments]);
+        clearAttachments();
       }
 
-      function sendMessage(content) {
+      function sendMessage(content, attachments = []) {
         if (messageCount === 0 && welcomeEl) welcomeEl.style.display = "none";
-        addMessage("user", content);
-        ws.send(JSON.stringify({ type: "message", content }));
+        addMessage("user", content, attachments);
+        // Build message with attachment URLs appended as markdown
+        let fullContent = content;
+        if (attachments.length > 0) {
+          const links = attachments.map(a => {
+            if (a.contentType.startsWith("image/")) return `![image](${a.serverUrl})`;
+            return `[${a.file.name}](${a.serverUrl})`;
+          }).join("\n");
+          fullContent = content ? `${content}\n${links}` : links;
+        }
+        ws.send(JSON.stringify({ type: "message", content: fullContent }));
         inputEl.value = "";
         inputEl.style.height = "auto";
         inputEl.focus();
+      }
+
+      // =========================================================================
+      // Attachment handling
+      // =========================================================================
+      fileInput.addEventListener("change", async () => {
+        const files = Array.from(fileInput.files || []);
+        fileInput.value = "";
+        for (const file of files) {
+          await addAttachment(file);
+        }
+      });
+
+      async function addAttachment(file) {
+        const localUrl = URL.createObjectURL(file);
+        const isImage = file.type.startsWith("image/");
+
+        // Show preview immediately
+        const thumb = document.createElement("div");
+        thumb.className = "attach-thumb";
+        const idx = pendingAttachments.length;
+        thumb.dataset.idx = idx;
+        if (isImage) {
+          thumb.innerHTML = `<img src="${localUrl}" alt="${escapeHtml(file.name)}" /><span class="remove-btn" onclick="removeAttachment(${idx})">✕</span>`;
+        } else {
+          thumb.innerHTML = `<div class="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-300" style="max-width:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${escapeHtml(file.name)}</div><span class="remove-btn" onclick="removeAttachment(${idx})">✕</span>`;
+        }
+        attachPreview.appendChild(thumb);
+        attachPreview.classList.remove("hidden");
+
+        // Upload to server
+        const entry = { file, localUrl, serverUrl: null, contentType: file.type, thumb };
+        pendingAttachments.push(entry);
+        updateAttachCount();
+
+        try {
+          const fd = new FormData();
+          fd.append("file", file);
+          const res = await fetch("/api/upload", { method: "POST", body: fd });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          entry.serverUrl = data.url;
+        } catch (err) {
+          showToast(`Upload failed: ${err.message}`, "error");
+          removeAttachment(idx);
+        }
+      }
+
+      function removeAttachment(idx) {
+        const entry = pendingAttachments[idx];
+        if (!entry) return;
+        if (entry.localUrl) URL.revokeObjectURL(entry.localUrl);
+        if (entry.thumb) entry.thumb.remove();
+        pendingAttachments[idx] = null;
+        // Compact
+        pendingAttachments = pendingAttachments.filter(Boolean);
+        if (pendingAttachments.length === 0) attachPreview.classList.add("hidden");
+        updateAttachCount();
+      }
+
+      function clearAttachments() {
+        pendingAttachments.forEach(a => { if (a?.localUrl) URL.revokeObjectURL(a.localUrl); });
+        pendingAttachments = [];
+        attachPreview.innerHTML = "";
+        attachPreview.classList.add("hidden");
+        updateAttachCount();
+      }
+
+      function updateAttachCount() {
+        const n = pendingAttachments.length;
+        if (n === 0) { attachCount.classList.add("hidden"); return; }
+        attachCountNum.textContent = n;
+        attachCount.classList.remove("hidden");
       }
 
       function sendQuickMessage(content) {
@@ -601,17 +706,28 @@
       // =========================================================================
       // Message rendering
       // =========================================================================
-      function addMessage(role, content) {
+      function addMessage(role, content, attachments = []) {
         messageCount++;
         const wrapper = document.createElement("div");
         wrapper.className = "fade-in";
 
         if (role === "user") {
+          // Build attachment HTML for user bubble
+          let attachHtml = "";
+          attachments.forEach(a => {
+            if (!a) return;
+            if (a.contentType.startsWith("image/")) {
+              attachHtml += `<img src="${a.localUrl}" class="msg-image" onclick="window.open('${a.serverUrl || a.localUrl}','_blank')" />`;
+            } else {
+              attachHtml += `<a href="${a.serverUrl || a.localUrl}" target="_blank" class="msg-file">📎 ${escapeHtml(a.file.name)}</a>`;
+            }
+          });
           wrapper.innerHTML = `
           <div class="flex justify-end mb-4">
             <div class="max-w-[85%] md:max-w-[70%]">
               <div class="bg-pocket-600/20 border border-pocket-500/20 rounded-2xl rounded-tr-md px-4 py-2.5">
-                <div class="msg-content text-sm text-slate-200">${escapeHtml(content)}</div>
+                ${attachHtml}
+                ${content ? `<div class="msg-content text-sm text-slate-200 ${attachHtml ? 'mt-1' : ''}">${escapeHtml(content)}</div>` : ""}
               </div>
               <div class="text-right mt-1 text-xs text-slate-600">${formatTime()}</div>
             </div>
